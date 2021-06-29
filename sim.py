@@ -5,17 +5,21 @@ py.init()
 
 healthy = (100,100,100)
 infected = (255,0,0)
-res = 600
+res =600
 screen = py.display.set_mode((res,res))
 clock = py.time.Clock()
-fps_limit = 60
-
+fps_limit = 40
+def drawBorders():
+    py.draw.rect(screen,(200,200,200),(0,0,600,10))
+    py.draw.rect(screen,(200,200,200),(0,0,10,600))
+    py.draw.rect(screen,(200,200,200),(0,590,600,10))
+    py.draw.rect(screen,(200,200,200),(590,0,10,600))
 class Person():
     def __init__(self, x, y, color):
         self.posx = x
         self.posy = y
         self.color = color
-        self.movement_vector = random.uniform(-1, 1)/random.uniform(-1, 1)
+        self.movement_vector =( random.uniform(-1, 1),random.uniform(-1, 1))
         self.rect = py.Rect(self.posx,self.posy,10,10)
     def move(self,factorX , factorY):
         self.posx +=factorX
@@ -29,8 +33,8 @@ class Person():
 
 running = True
 people = []
-sample_size = 9
-distance = (res-200) / int(sqrt(sample_size))
+sample_size = 100
+distance = (res-20) / int(sqrt(sample_size))
 
 for y in range(int(sqrt(sample_size))):
     for x in range(int(sqrt(sample_size))):
@@ -47,13 +51,19 @@ while running:
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
+
     for p in people:
-        p.move(p.movement_vector,1/p.movement_vector)
+        p.move(p.movement_vector[0] * 2,p.movement_vector[1] * 2)
         p.draw()
         for o in people:
-            if o.posx != p.posx and o.posy != p.posy:
-                if o.rect.colliderect(p.rect):
-                    print("collided")
+            if o.color == infected:
+                if o.posx != p.posx and o.posy != p.posy:
+                    if o.rect.colliderect(p.rect):
+                        print("collided")
+                        o.color = p.color = infected
+                        p.draw()
+                        o.draw()
+    drawBorders()
 
     py.display.flip()
 
