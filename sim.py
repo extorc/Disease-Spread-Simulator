@@ -19,7 +19,7 @@ b2 =py.Rect(0,0,10,600)
 b3 =py.Rect(0,590,600,10)
 b4 =py.Rect(590,0,10,600)
 bordercolor = (200,200,200)
-
+time = 0
 def drawBorders():
     py.draw.rect(screen,bordercolor,b1)
     py.draw.rect(screen,bordercolor,b2)
@@ -73,16 +73,18 @@ while running:
     for p in people:
         if p.color == infected:
             inf += 1
-    print(inf)
+    # print(inf)
     if prev_inf == inf:
         d_infected += 1
     else:
         d_infected = 0
-    if d_infected > 30:
+    if d_infected > 100:
         print("All Infected")
         break
-    print(d_infected)
+    # print(d_infected)
     prev_inf = inf
+    time += 1
+    print(d_infected,inf,time)
     py.display.flip()
-
+    inf = 0
 py.quit()
