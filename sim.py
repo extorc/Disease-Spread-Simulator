@@ -12,8 +12,8 @@ clock = py.time.Clock()
 fps_limit = 40
 running = True
 people = []
-sample_size = 36
-distance = (res-20) / int(sqrt(sample_size))
+sample_size = 400
+distance = (res-300) / int(sqrt(sample_size))
 b1 =py.Rect(0,0,600,10)
 b2 =py.Rect(0,0,10,600)
 b3 =py.Rect(0,590,600,10)
@@ -34,7 +34,11 @@ infected_person_x = random.randint(0,int(sqrt(sample_size)))
 infected_person_y = random.randint(0,int(sqrt(sample_size)))
 
 people[infected_person_x * infected_person_y - 1].setColor(infected)
-
+status = []
+all_infected = False
+d_infected = 0
+prev_inf = 0
+inf = 0
 while running:
     clock.tick(fps_limit)
     screen.fill((50,50,50))
@@ -46,13 +50,17 @@ while running:
         p.move(p.movement_vector[0] * 2,p.movement_vector[1] * 2)
         p.draw()
         if p.rect.colliderect(b1):
-            print("top")
+            # print("top")
+            p.movement_vector[1]  = p.movement_vector[1] * -1
         elif p.rect.colliderect(b2):
-            print("left")
+            # print("left")
+            p.movement_vector[0]  = p.movement_vector[0] * -1
         elif p.rect.colliderect(b3):
-            print("bottom")
+            # print("bottom")
+            p.movement_vector[1]  = p.movement_vector[1] * -1
         elif p.rect.colliderect(b4):
-            print("right")
+            # print("right")
+            p.movement_vector[0]  = p.movement_vector[0] * -1
         for o in people:
             if o.color == infected:
                 if o.posx != p.posx and o.posy != p.posy:
@@ -60,8 +68,21 @@ while running:
                         o.color = p.color = infected
                         p.draw()
                         o.draw()
-    drawBorders()
 
+    drawBorders()
+    for p in people:
+        if p.color == infected:
+            inf += 1
+    print(inf)
+    if prev_inf == inf:
+        d_infected += 1
+    else:
+        d_infected = 0
+    if d_infected > 30:
+        print("All Infected")
+        break
+    print(d_infected)
+    prev_inf = inf
     py.display.flip()
 
 py.quit()
