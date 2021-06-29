@@ -15,19 +15,22 @@ class Person():
         self.posx = x
         self.posy = y
         self.color = color
+        self.movement_vector = random.uniform(-1, 1)/random.uniform(-1, 1)
+        self.rect = py.Rect(self.posx,self.posy,10,10)
     def move(self,factorX , factorY):
         self.posx +=factorX
         self.posy +=factorY
+        self.rect = py.Rect(self.posx,self.posy,10,10)
     def draw(self):
-        py.draw.circle(screen, self.color,(self.posx,self.posy),res/85)
+        py.draw.rect(screen,self.color,self.rect)
     def setColor(self, color):
         self.color = color
         self.draw()
 
 running = True
 people = []
-sample_size = 1000
-distance = (res-20) / int(sqrt(sample_size))
+sample_size = 9
+distance = (res-200) / int(sqrt(sample_size))
 
 for y in range(int(sqrt(sample_size))):
     for x in range(int(sqrt(sample_size))):
@@ -36,7 +39,7 @@ for y in range(int(sqrt(sample_size))):
 infected_person_x = random.randint(0,int(sqrt(sample_size)))
 infected_person_y = random.randint(0,int(sqrt(sample_size)))
 
-people[infected_person_x * infected_person_y].setColor(infected)
+people[infected_person_x * infected_person_y - 1].setColor(infected)
 
 while running:
     clock.tick(fps_limit)
@@ -45,7 +48,13 @@ while running:
         if event.type == py.QUIT:
             running = False
     for p in people:
+        p.move(p.movement_vector,1/p.movement_vector)
         p.draw()
+        for o in people:
+            if o.posx != p.posx and o.posy != p.posy:
+                if o.rect.colliderect(p.rect):
+                    print("collided")
+
     py.display.flip()
 
 py.quit()
