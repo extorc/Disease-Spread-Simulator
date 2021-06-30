@@ -1,5 +1,6 @@
 import pygame as py
 import random
+from math import sqrt
 
 class Person():
     def __init__(self, x, y, color,screen):
@@ -21,3 +22,8 @@ class Person():
     def setColor(self, color):
         self.color = color
         self.draw()
+
+def infect_random_person(sample_size,people,color):
+    infected_person_x = random.randint(0,int(sqrt(sample_size)))
+    infected_person_y = random.randint(0,int(sqrt(sample_size)))
+    people[infected_person_x * infected_person_y - 1].setColor(color)

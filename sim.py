@@ -1,13 +1,13 @@
 import pygame as py
 from math import sqrt
 import random
-from Classes.Person import Person
+from Classes.Person import Person , infect_random_person
 import matplotlib.pyplot as plt
 from Classes.Borders import drawBorders , b1, b2, b3, b4
+from Classes.Colors import *
+
 py.init()
 
-healthy = (100,100,100)
-infected = (255,0,0)
 res =600
 screen = py.display.set_mode((res,res))
 clock = py.time.Clock()
@@ -17,24 +17,22 @@ people = []
 sample_size = 225
 distance = (res-100) / int(sqrt(sample_size))
 time = 0
-
-for y in range(int(sqrt(sample_size))):
-    for x in range(int(sqrt(sample_size))):
-        people.append(Person((y + 1) * distance,(x + 1) * distance,healthy,screen))
-
-infected_person_x = random.randint(0,int(sqrt(sample_size)))
-infected_person_y = random.randint(0,int(sqrt(sample_size)))
-
-people[infected_person_x * infected_person_y - 1].setColor(infected)
 status = []
 all_infected = False
 d_infected = 0
 prev_inf = 0
 inf = 0
 inf_plot = []
+
+for y in range(int(sqrt(sample_size))):
+    for x in range(int(sqrt(sample_size))):
+        people.append(Person((y + 1) * distance,(x + 1) * distance,healthy,screen))
+
+infect_random_person(sample_size,people,infected)
+
 while running:
     clock.tick(fps_limit)
-    screen.fill((50,50,50))
+    screen.fill(background)
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
@@ -61,7 +59,6 @@ while running:
                         o.color = p.color = infected
                         p.draw()
                         o.draw()
-
 
     drawBorders(screen)
     for p in people:
