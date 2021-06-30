@@ -2,6 +2,7 @@ import pygame as py
 from math import sqrt
 import random
 from Classes.Person import Person
+import matplotlib.pyplot as plt
 py.init()
 
 healthy = (100,100,100)
@@ -20,6 +21,7 @@ b3 =py.Rect(0,590,600,10)
 b4 =py.Rect(590,0,10,600)
 bordercolor = (200,200,200)
 time = 0
+inf_plot = []
 def drawBorders():
     py.draw.rect(screen,bordercolor,b1)
     py.draw.rect(screen,bordercolor,b2)
@@ -65,14 +67,21 @@ while running:
             if o.color == infected:
                 if o.posx != p.posx and o.posy != p.posy:
                     if o.rect.colliderect(p.rect):
-                        o.color = p.color = infected
-                        p.draw()
-                        o.draw()
+                        if o.spreadProbability > 0:
+                            o.color = p.color = infected
+                            o.spreadProbability -= 1
+                            p.draw()
+                            o.draw()
 
     drawBorders()
+
     for p in people:
         if p.color == infected:
+            p.infectionTime +=1
+            if p.infectionTime >= 100:
+                p.setColor(healthy)
             inf += 1
+
     # print(inf)
     if prev_inf == inf:
         d_infected += 1
@@ -85,6 +94,9 @@ while running:
     prev_inf = inf
     time += 1
     print(d_infected,inf,time)
+    inf_plot.append(inf)
     py.display.flip()
     inf = 0
+plt.plot(inf_plot)
+plt.show()
 py.quit()

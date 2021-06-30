@@ -12,6 +12,7 @@ class Person():
         self.movement_vector =[random.uniform(-1, 1) * 10,random.uniform(-1, 1) * 3]
         self.rect = py.Rect(self.posx,self.posy,6,6)
         self.spreadProbability = random.choice(probs)
+        self.infectionTime = 0
     def move(self,factorX , factorY):
         self.posx +=factorX
         self.posy +=factorY
