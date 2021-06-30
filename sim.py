@@ -14,8 +14,8 @@ clock = py.time.Clock()
 fps_limit = 40
 running = True
 people = []
-sample_size = 900
-distance = (res-200) / int(sqrt(sample_size))
+sample_size = 225
+distance = (res-100) / int(sqrt(sample_size))
 time = 0
 
 for y in range(int(sqrt(sample_size))):
@@ -70,6 +70,7 @@ while running:
             # print(p.infectionTime)
             if p.infectionTime <= 0:
                 p.color = healthy
+                p.infectionTime = random.randint(50,150)
             else:
                 inf += 1
 
