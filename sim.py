@@ -17,7 +17,6 @@ people = []
 sample_size = 225
 distance = (res-100) / int(sqrt(sample_size))
 time = 0
-status = []
 all_infected = False
 d_infected = 0
 prev_inf = 0
@@ -36,21 +35,17 @@ while running:
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
-
+    drawBorders(screen)
     for p in people:
         p.move(p.movement_vector[0] * 2,p.movement_vector[1] * 2)
         p.draw()
         if p.rect.colliderect(b1):
-            # print("top")
             p.movement_vector[1]  = p.movement_vector[1] * -1
         elif p.rect.colliderect(b2):
-            # print("left")
             p.movement_vector[0]  = p.movement_vector[0] * -1
         elif p.rect.colliderect(b3):
-            # print("bottom")
             p.movement_vector[1]  = p.movement_vector[1] * -1
         elif p.rect.colliderect(b4):
-            # print("right")
             p.movement_vector[0]  = p.movement_vector[0] * -1
         for o in people:
             if o.color == infected:
@@ -60,11 +55,8 @@ while running:
                         p.draw()
                         o.draw()
 
-    drawBorders(screen)
-    for p in people:
         if p.color == infected:
             p.infectionTime -= 1
-            # print(p.infectionTime)
             if p.infectionTime <= 0:
                 p.color = healthy
                 p.infectionTime = random.randint(50,150)
@@ -76,7 +68,7 @@ while running:
     else:
         d_infected = 0
     if d_infected > 100:
-        print("All Infected")
+        print("No More Infections")
         break
 
     prev_inf = inf

@@ -11,7 +11,6 @@ class Person():
         self.color = color
         self.movement_vector =[random.uniform(-1, 1),random.uniform(-1, 1) ]
         self.rect = py.Rect(self.posx,self.posy,self.size,self.size)
-        self.infectedLast = False
         self.infectionTime =random.randint(100,200)
     def move(self,factorX , factorY):
         self.posx +=factorX
